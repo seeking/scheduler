@@ -1,7 +1,7 @@
 <?php
 	// The People's Glorious Scheduler
 	// Hacked by Ming Chow
-	// Last updated on January 8, 2011
+	// Last updated on January 10, 2011
 	
 	session_start();
 	if (!isset($_SESSION['login'])) {
@@ -11,8 +11,8 @@
 	
 	require_once('dblib.php');
 
-	$blocks = getBlocks();
-	$numBlocks = count($blocks);
+	$times = getTimes();
+	$numTimes = count($times);
 	$maxSchillings = 1000;
 	$maxVetos = 2;
 ?>
@@ -27,7 +27,7 @@
 <link href="default.css" rel="stylesheet" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script type="text/javascript">
-	var numBlocks = <?= $numBlocks?>;
+	var numTimes = <?= $numTimes?>;
 	var maxSchillings = <?= $maxSchillings?>;
 	var maxVetos = <?= $maxVetos?>;
 	var numSchillings;
@@ -45,8 +45,8 @@
 		numVetos = maxVetos;
 		numSchillings = maxSchillings
 		currency = document.getElementById("currency");
-		for (i = 1; i <= numBlocks; i++) {
-			elemName = 'block' + i;
+		for (i = 1; i <= numTimes; i++) {
+			elemName = 'time' + i;
 			elem = document.getElementById(elemName).value;
 			value = parseInt(elem);
 			if (!isNaN(value)) {
@@ -102,8 +102,8 @@
 	if (!empty($_POST)) {
 		$schillingCount = 0;
 		$vetoCount = 0;
-		for ($count = 1; $count <= $numBlocks; $count++) {
-			$label = "block$count";
+		for ($count = 1; $count <= $numTimes; $count++) {
+			$label = "time$count";
 			$schillingsCheck += intval($_POST[$label]);
 			$label = "veto$count";
 			if (isset($_POST[$label])) {
@@ -118,7 +118,7 @@
 		}
 	}
 	if (!empty($_POST) && !$errors) {
-		insertVotes($_SESSION['login'], $_POST, $blocks);
+		insertVotes($_SESSION['login'], $_POST, $times);
 		echo '<p>Thanks for your submission.  You can <a href="logout.php">log out</a> now.</p>';
 	}
 	else {
@@ -129,13 +129,13 @@
 
 <div id="currency"></div>
 
-<h4>For each block, enter the number of schillings that you would like to spend on it, or veto it.</h4>
+<h4>For each time, enter the number of schillings that you would like to spend on it, or veto it.</h4>
 <form id="vote" action="vote.php" method="post" onreset="initCurrency()">
 <table>
 <?php
 
-	foreach ($blocks as $b) {
-		print '<tr><td>Block '. $b['block_id'] . ': ' . $b['time_descr'] . ' (' . $b['instructor']. ') </td><td><input type="text" name="block' . $b['block_id'] . '" id="block' . $b['block_id'] . '" size="5" value="0" onchange="updateCurrency()" /></td><td>Veto <input type="checkbox" name="veto' . $b['block_id'] . '" id="veto' . $b['block_id'] . '" onchange="updateCurrency()" /></td></tr></p>';
+	foreach ($times as $b) {
+		print '<tr><td>Time '. $b['time_id'] . ': ' . $b['time_descr'] . '</td><td><input type="text" name="time' . $b['time_id'] . '" id="time' . $b['time_id'] . '" size="5" value="0" onchange="updateCurrency()" /></td><td>Veto <input type="checkbox" name="veto' . $b['time_id'] . '" id="veto' . $b['time_id'] . '" onchange="updateCurrency()" /></td></tr></p>';
 	}
 ?>
 </table>

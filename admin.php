@@ -1,7 +1,7 @@
 <?php
 	// The People's Glorious Scheduler
 	// Hacked by Ming Chow
-	// Last updated on January 8, 2011
+	// Last updated on January 10, 2011
 	
 	session_start();
 	if (!isset($_SESSION['login']) && !isset($_SESSION['admin'])) {
@@ -54,10 +54,10 @@
 <p id="bids"><a href="#">View Bids</a></p>
 <div id="bid_results">
 <?php
-	$blocks = getBlocks();
-	foreach ($blocks as $b) {
-		echo "<h4>Block " . $b['block_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
-		$results = getBidsForBlock($b['block_id']);
+	$times = getTimes();
+	foreach ($times as $b) {
+		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
+		$results = getBidsForTime($b['time_id']);
 		$sum = 0;
 		if (!empty($results)) {
 			echo "<table class=\"results\"><tr><th>Login</th><th>Schillings Bid</th><th>Date Voted</th>\n";
@@ -66,7 +66,7 @@
 				$sum += $r['num_schillings'];
 			}
 			echo "</table>\n";
-			echo "<p>Total number of schillings used for this block: $sum</p>\n";
+			echo "<p>Total number of schillings used for this time: $sum</p>\n";
 		}
 		else {
 			echo "<ul><li>Nothing</li></ul>\n";
@@ -78,9 +78,9 @@
 <p id="vetos"><a href="#">View Vetos</a></p>
 <div id="veto_results">
 <?php
-	foreach ($blocks as $b) {
-		echo "<h4>Block " . $b['block_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
-		$results = getBidsForBlock($b['block_id']);
+	foreach ($times as $b) {
+		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
+		$results = getBidsForTime($b['time_id']);
 		$sum = 0;
 		if (!empty($results)) {
 			echo "<table class=\"results\"><tr><th>Login</th><th>Date Voted</th>\n";
@@ -89,7 +89,7 @@
 				$sum += 1;
 			}
 			echo "</table>\n";
-			echo "<p>Total number of vetos for this block: $sum</p>\n";
+			echo "<p>Total number of vetos for this time: $sum</p>\n";
 		}
 		else {
 			echo "<ul><li>Nothing</li></ul>\n";

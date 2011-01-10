@@ -6,11 +6,10 @@
 	session_start();
 	require_once("dblib.php");
 	$access = getLogin($_POST['login'], $_POST['password']);
-	if ($access != false) {
-		$_SESSION['login'] = $access;
-		$admin = checkAdmin($access);
-		if ($admin) {
-			$_SESSION['admin'] = $access;
+	if (!empty($access)) {
+		$_SESSION['login'] = $access['login'];
+		if ($access['admin'] == 1) {
+			$_SESSION['admin'] = $access['login'];
 			header("Location: admin.php");
 			exit;
 		}
