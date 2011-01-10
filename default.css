@@ -35,6 +35,22 @@ th {
 	border-width: 1px;
 }
 
+.results td {
+	width: 250px;
+}
+
 #bid_results, #veto_results {
 	display: none;
+}
+
+table.blocktbl td.timeslot {
+	width: 350px;
+}
+
+table.blocktbl td.timebox {
+	width: 100px;
+}
+
+table.blocktbl td.vetobox {
+	width: 100px;
 }

@@ -56,17 +56,16 @@
 <?php
 	$times = getTimes();
 	foreach ($times as $b) {
-		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
-		$results = getBidsForTime($b['time_id']);
+		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . "; Block " . $b['block_id'] . ")</h4>\n";		$results = getBidsForTime($b['time_id']);
 		$sum = 0;
 		if (!empty($results)) {
-			echo "<table class=\"results\"><tr><th>Login</th><th>Schillings Bid</th><th>Date Voted</th>\n";
+			echo "<table class=\"results\"><tr><th>Login</th><th>shillings Bid</th><th>Date Voted</th>\n";
 			foreach ($results as $r) {
-				echo "<tr><td>" . $r['login'] . "</td>\n<td>" . $r['num_schillings'] . "</td>\n<td>" . $r['voted_on'] . "</td></tr>\n";
-				$sum += $r['num_schillings'];
+				echo "<tr><td>" . $r['login'] . "</td>\n<td>" . $r['num_shillings'] . "</td>\n<td>" . $r['voted_on'] . "</td></tr>\n";
+				$sum += $r['num_shillings'];
 			}
 			echo "</table>\n";
-			echo "<p>Total number of schillings used for this time: $sum</p>\n";
+			echo "<p>Total number of shillings used for this time: $sum</p>\n";
 		}
 		else {
 			echo "<ul><li>Nothing</li></ul>\n";
@@ -79,8 +78,8 @@
 <div id="veto_results">
 <?php
 	foreach ($times as $b) {
-		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . ")</h4>\n";
-		$results = getBidsForTime($b['time_id']);
+		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . "; Block " . $b['block_id'] . ")</h4>\n";
+		$results = getVetosForTime($b['time_id']);
 		$sum = 0;
 		if (!empty($results)) {
 			echo "<table class=\"results\"><tr><th>Login</th><th>Date Voted</th>\n";

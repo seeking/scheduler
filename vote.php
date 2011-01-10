@@ -11,9 +11,11 @@
 	
 	require_once('dblib.php');
 
+	$blocks = getBlocks();
 	$times = getTimes();
+	$numBlocks = count($blocks);
 	$numTimes = count($times);
-	$maxSchillings = 1000;
+	$maxShillings = 1000;
 	$maxVetos = 2;
 ?>
 
@@ -25,43 +27,61 @@
 <title>The People's Glorious Scheduler</title>
 <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/> 
 <link href="default.css" rel="stylesheet" type="text/css" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script type="text/javascript">
+	var numBlocks = <?= $numBlocks?>;
 	var numTimes = <?= $numTimes?>;
-	var maxSchillings = <?= $maxSchillings?>;
+	var maxShillings = <?= $maxShillings?>;
 	var maxVetos = <?= $maxVetos?>;
-	var numSchillings;
+	var numShillings;
 	var numVetos;
 	
 	function initCurrency()
 	{
-		numSchillings = maxSchillings;
+		numShillings = maxShillings;
 		numVetos = maxVetos;
-		document.getElementById("currency").innerHTML = "<p>You have " + numSchillings + " schillings.</p></p>You have " + numVetos + " vetos.</p>";
+		document.getElementById("currency").innerHTML = "<p>You have " + numShillings + " shillings.</p></p>You have " + numVetos + " vetos.</p>";
 	}
 	
 	function updateCurrency()
 	{
 		numVetos = maxVetos;
-		numSchillings = maxSchillings
+		numShillings = maxShillings;
+		
 		currency = document.getElementById("currency");
 		for (i = 1; i <= numTimes; i++) {
 			elemName = 'time' + i;
 			elem = document.getElementById(elemName).value;
 			value = parseInt(elem);
 			if (!isNaN(value)) {
-				numSchillings -= value;
+				numShillings -= value;
 			}
-			elemName = 'veto' + i;
+			/*elemName = 'veto' + i;
 			if (document.getElementById(elemName).checked) {
 				numVetos -= 1;
-			}	
+			}*/
 		}
-		currency.innerHTML = "<p>You have " + numSchillings + " schillings.</p></p>You have " + numVetos + " vetos.</p>"
-		if (numSchillings <= 0) {
+		for (i = 1; i <= numBlocks; i++) {
+			okay = false;
+			elemName = 'block' + i;
+			elems = document.getElementById(elemName).getElementsByClassName("veto");
+			j = 0;
+			while (!okay && j < elems.length) {
+				if (elems[j].checked) {
+					okay = true;
+				}
+				else {
+					j++;
+				}
+			}
+			if (okay) {
+				numVetos -= 1;
+			}
+		}
+		currency.innerHTML = "<p>You have " + numShillings + " shillings.</p></p>You have " + numVetos + " vetos.</p>"
+		if (numShillings <= 0) {
 			newElem = document.createElement("p");
 			newElem.setAttribute("class", "error");
-			newElem.appendChild(document.createTextNode("You used up all your schillings!"));
+			newElem.appendChild(document.createTextNode("You used up all your shillings!"));
 			currency.appendChild(newElem);
 		}
 		if (numVetos <= 0) {
@@ -75,15 +95,15 @@
 	function checkSubmission()
 	{
 		submit = true;
-		if (numSchillings < 0 || numVetos < 0) {
+		if (numShillings < 0 || numVetos < 0) {
 			submit = false;
-			alert("Sorry, but you used too many schillings or vetos!");
+			alert("Sorry, but you used too many shillings or vetos!");
 		}
-		else if (numSchillings > 0) {
-			submit = confirm("You have unspent schillings.  Are you sure you want to submit?");
+		else if (numShillings > 0) {
+			submit = confirm("You have unspent shillings.  Are you sure you want to submit?");
 		}
 		if (submit) {
-			document.forms['vote'].submit();
+			document.forms['votefrm'].submit();
 		}
 	}
 </script>
@@ -97,25 +117,25 @@
 
 <?php
 	$errors = false;
-	$schillingsCheck = 0;
+	$shillingsCheck = 0;
 	$vetosCheck = 0;
 	if (!empty($_POST)) {
 		$schillingCount = 0;
-		$vetoCount = 0;
+		//$vetoCount = 0;
 		for ($count = 1; $count <= $numTimes; $count++) {
 			$label = "time$count";
-			$schillingsCheck += intval($_POST[$label]);
-			$label = "veto$count";
+			$shillingsCheck += intval($_POST[$label]);
+			/*$label = "veto$count";
 			if (isset($_POST[$label])) {
 				$vetosCheck++;
-			}
+			}*/
 		}
-		if ($schillingsCheck < 0 || $schillingsCheck > $maxSchillings) {
+		if ($shillingsCheck < 0 || $shillingsCheck > $maxShillings) {
 			$errors = true;
 		}
-		if ($votesCheck < 0 || $votesCheck > $maxVotes) {
+		/*if ($votesCheck < 0 || $votesCheck > $maxVotes) {
 			$errors = true;
-		}
+		}*/
 	}
 	if (!empty($_POST) && !$errors) {
 		insertVotes($_SESSION['login'], $_POST, $times);
@@ -129,16 +149,20 @@
 
 <div id="currency"></div>
 
-<h4>For each time, enter the number of schillings that you would like to spend on it, or veto it.</h4>
-<form id="vote" action="vote.php" method="post" onreset="initCurrency()">
-<table>
+<h4>For each time, enter the number of shillings that you would like to spend on it, or veto it.</h4>
+<form id="votefrm" action="vote.php" method="post" onreset="initCurrency()">
 <?php
-
-	foreach ($times as $b) {
-		print '<tr><td>Time '. $b['time_id'] . ': ' . $b['time_descr'] . '</td><td><input type="text" name="time' . $b['time_id'] . '" id="time' . $b['time_id'] . '" size="5" value="0" onchange="updateCurrency()" /></td><td>Veto <input type="checkbox" name="veto' . $b['time_id'] . '" id="veto' . $b['time_id'] . '" onchange="updateCurrency()" /></td></tr></p>';
+	foreach ($blocks as $b) {
+		echo "<div id=\"block" . $b['block_id'] . "\">\n";
+		$timesByBlock = getTimesByBlock($b['block_id']);
+		echo "<table class=\"blocktbl\">\n";
+		foreach ($timesByBlock as $t) {
+			echo '<tr><td class="timeslot">Time '. $t['time_id'] . ': ' . $t['time_descr'] . ' (Block ' . $b['block_id'] . ')</td><td class="timebox"><input type="text" name="time' . $t['time_id'] . '" id="time' . $t['time_id'] . '" size="5" value="0" onchange="updateCurrency()" /></td><td class="vetobox">Veto <input type="checkbox" name="veto' . $t['time_id'] . '" class="veto" id="veto' . $t['time_id'] . '" onchange="updateCurrency()" /></td></tr>';
+		}
+		print "</table>\n";
+		echo "</div>\n";
 	}
 ?>
-</table>
 <p><button type="button" onclick="checkSubmission()">Submit</button> <input type="reset" /></p>
 </form>
 

@@ -48,7 +48,7 @@
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT time_id, time_descr, instructor FROM schedule_times WHERE active = 1 ORDER BY time_id");
+		$result = mysql_query("SELECT time_id, time_descr, instructor, block_id FROM schedule_times ORDER BY time_id");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;
@@ -63,6 +63,44 @@
 		return $results;
 	}
 	
+	function getBlocks()
+	{
+		global $db;
+		$results = array();
+		$result = mysql_query("SELECT block_id FROM schedule_blocks ORDER BY block_id");
+		if (!result) {
+			$message  = 'Invalid query: ' . mysql_error() . "\n";
+			$message .= 'Whole query: ' . $query;
+			die($message);
+		}
+		else {
+			while ($row = mysql_fetch_assoc($result)) {
+				array_push($results, $row);
+			}
+		}
+		mysql_free_result($result);
+		return $results;
+	}
+
+	function getTimesByBlock ($block)
+	{
+		global $db;
+		$results = array();
+		$result = mysql_query("SELECT time_id, time_descr, instructor FROM schedule_times WHERE block_id = $block ORDER BY time_id");
+		if (!result) {
+			$message  = 'Invalid query: ' . mysql_error() . "\n";
+			$message .= 'Whole query: ' . $query;
+			die($message);
+		}
+		else {
+			while ($row = mysql_fetch_assoc($result)) {
+				array_push($results, $row);
+			}
+		}
+		mysql_free_result($result);
+		return $results;
+	}
+		
 	function insertVotes ($login, $theForm, $times)
 	{
 		// Precondition: Assume $theForm is legitimate
@@ -75,7 +113,7 @@
 			$label = "time$count";
 			$val = intval($theForm[$label]);
 			if ($val > 0) {
-				mysql_query("INSERT INTO bids (vote_session_id, time_id, num_schillings) VALUES ($voteSessionID, $count, $val)");
+				mysql_query("INSERT INTO bids (vote_session_id, time_id, num_shillings) VALUES ($voteSessionID, $count, $val)");
 			}
 			$label = "veto$count";
 			if (isset($theForm[$label])) {
@@ -88,7 +126,7 @@
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT s.login, b.num_schillings, DATE_FORMAT(s.voted_on, '%l/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN bids b ON (s.vote_session_id = b.vote_session_id) WHERE s.active = 1 AND b.time_id = $time ORDER BY s.login");
+		$result = mysql_query("SELECT s.login, b.num_shillings, DATE_FORMAT(s.voted_on, '%l/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN bids b ON (s.vote_session_id = b.vote_session_id) WHERE s.active = 1 AND b.time_id = $time ORDER BY s.login");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;

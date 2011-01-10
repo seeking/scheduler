@@ -5,3 +5,4 @@ What it (the product) is, what is has:
 * Submission is possible if the student has spent less than 1000 (i.e., unspent schillings) and warning message will be flashed right before submission
 * Students can submit more than once but only the last submission will count!
 * Administration to view running list of bids and vetos with total tally
+* Custom authentication
