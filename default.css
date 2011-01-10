@@ -1,0 +1,40 @@
+body {
+	padding-right: 25px;
+	padding-left: 25px;
+	font-family: Helvetica Neue,Arial,Helvetica,sans-serif;
+}
+
+.error {
+	color: #FF0000;
+}
+
+.rt {
+	text-align: right;
+}
+
+#currency {
+	padding-left: 10px;
+	border-style: solid;
+	border-width: 5px;
+}
+
+td {
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	vertical-align: top;
+}
+
+th {
+	text-align: left;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}
+
+.results {
+	width: 50%;
+	border-width: 1px;
+}
+
+#bid_results, #veto_results {
+	display: none;
+}
