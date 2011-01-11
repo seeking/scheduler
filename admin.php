@@ -59,7 +59,7 @@
 		echo "<h4>Time " . $b['time_id']. ": " . $b['time_descr'] . " (" . $b['instructor'] . "; Block " . $b['block_id'] . ")</h4>\n";		$results = getBidsForTime($b['time_id']);
 		$sum = 0;
 		if (!empty($results)) {
-			echo "<table class=\"results\"><tr><th>Login</th><th>shillings Bid</th><th>Date Voted</th>\n";
+			echo "<table class=\"results\"><tr><th>Login</th><th>Shillings Bid</th><th>Date Voted</th>\n";
 			foreach ($results as $r) {
 				echo "<tr><td>" . $r['login'] . "</td>\n<td>" . $r['num_shillings'] . "</td>\n<td>" . $r['voted_on'] . "</td></tr>\n";
 				$sum += $r['num_shillings'];

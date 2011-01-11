@@ -126,7 +126,7 @@
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT s.login, b.num_shillings, DATE_FORMAT(s.voted_on, '%l/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN bids b ON (s.vote_session_id = b.vote_session_id) WHERE s.active = 1 AND b.time_id = $time ORDER BY s.login");
+		$result = mysql_query("SELECT s.login, b.num_shillings, DATE_FORMAT(s.voted_on, '%c/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN bids b ON (s.vote_session_id = b.vote_session_id) WHERE s.active = 1 AND b.time_id = $time ORDER BY s.login");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;
@@ -145,7 +145,7 @@
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT s.login, DATE_FORMAT(s.voted_on, '%l/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN vetos v ON (s.vote_session_id = v.vote_session_id) WHERE s.active = 1 AND v.time_id = $time ORDER BY s.login");
+		$result = mysql_query("SELECT s.login, DATE_FORMAT(s.voted_on, '%c/%d/%Y %h:%i:%s %p') AS voted_on FROM vote_sessions s INNER JOIN vetos v ON (s.vote_session_id = v.vote_session_id) WHERE s.active = 1 AND v.time_id = $time ORDER BY s.login");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;
