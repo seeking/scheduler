@@ -1,8 +1,8 @@
 What it (the product) is, what is has:
-* Collects bids and vetos from students; students start out with 1000 schillings and 2 vetos
-* Automatic update of unspent amount (with warning and error if student spent 1000 or more schillings or 2 or more vetos)
-* Submission is not possible if student has spent over 1000 schillings or used over 2 vetos
-* Submission is possible if the student has spent less than 1000 (i.e., unspent schillings) and warning message will be flashed right before submission
+* Collects bids and vetos from students; students start out with 1000 shillings and 2 vetos
+* Automatic update of unspent amount (with warning and error if student spent 1000 or more shillings or 2 or more vetos)
+* Submission is not possible if student has spent over 1000 shillings or used over 2 vetos
+* Submission is possible if the student has spent less than 1000 (i.e., unspent shillings) and warning message will be flashed right before submission
 * Students can submit more than once but only the last submission will count!
 * Administration to view running list of bids and vetos with total tally
 * Custom authentication
