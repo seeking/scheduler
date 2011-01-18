@@ -1,7 +1,7 @@
 <?php
 	// The People's Glorious Scheduler
 	// Hacked by Ming Chow
-	// Last updated on January 10, 2011
+	// Last updated on January 17, 2011
 	
 	// Hacking attempted?
 	if (!isset($_SERVER['HTTP_REFERER'])) {
@@ -31,7 +31,7 @@
 	{
 		$row = array();
 		global $db;
-		$result = mysql_query("SELECT login, admin FROM users WHERE login = '" . mysql_real_escape_string($login) . "' AND password = SHA1('" . mysql_real_escape_string($password) . "')");
+		$result = mysql_query("SELECT login, admin, needsnr FROM users WHERE login = '" . mysql_real_escape_string($login) . "' AND password = SHA1('" . mysql_real_escape_string($password) . "')");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;
@@ -48,7 +48,7 @@
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT time_id, time_descr, instructor, block_id FROM schedule_times ORDER BY time_id");
+		$result = mysql_query("SELECT time_id, time_descr, instructor, block_id, bynr, byfellow FROM schedule_times ORDER BY time_id");
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;
@@ -82,11 +82,16 @@
 		return $results;
 	}
 
-	function getTimesByBlock ($block)
+	function getTimesByBlock ($block, $needsnr)
 	{
 		global $db;
 		$results = array();
-		$result = mysql_query("SELECT time_id, time_descr, instructor FROM schedule_times WHERE block_id = $block ORDER BY time_id");
+		if ($needsnr == 0) {
+			$result = mysql_query("SELECT time_id, time_descr, instructor, bynr, byfellow FROM schedule_times WHERE block_id = $block AND byfellow = 1 ORDER BY time_id");
+		}
+		else {
+			$result = mysql_query("SELECT time_id, time_descr, instructor, bynr, byfellow FROM schedule_times WHERE block_id = $block AND bynr = 1 ORDER BY time_id");
+		}
 		if (!result) {
 			$message  = 'Invalid query: ' . mysql_error() . "\n";
 			$message .= 'Whole query: ' . $query;

@@ -23,6 +23,8 @@ CREATE TABLE schedule_times
 	block_id SMALLINT(3) NOT NULL,
 	time_descr VARCHAR(60) NOT NULL,
 	instructor VARCHAR(20) NOT NULL,
+	bynr SMALLINT(1) NOT NULL,   /* offered by NR */
+	byfellow SMALLINT(1) NOT NULL,   /* offered by an Engineering Fellow */
 	PRIMARY KEY(time_id),
 	FOREIGN KEY(block_id) REFERENCES schedule_blocks(block_id)
 );
@@ -66,12 +68,14 @@ CREATE TABLE users
 	login VARCHAR(60) NOT NULL,
 	password TEXT NOT NULL,
 	admin SMALLINT(1) NOT NULL DEFAULT 0,
+	needsnr SMALLINT(1) NOT NULL DEFAULT 0,
+                            /* must be in section with NR, not Fellow */
 	PRIMARY KEY(login)
 );
 
 /* Prepopulation */
-INSERT INTO users (login, password, admin) VALUES ('mchow@cs.tufts.edu', SHA1('rexryanlovesfeet'), 1);
-INSERT INTO users (login, password, admin) VALUES ('nr@cs.tufts.edu', SHA1('rexryanlovesfeet'), 1);
+
+
 INSERT INTO schedule_blocks (block_id) VALUES (1);
 INSERT INTO schedule_blocks (block_id) VALUES (2);
 INSERT INTO schedule_blocks (block_id) VALUES (3);
@@ -84,21 +88,107 @@ INSERT INTO schedule_blocks (block_id) VALUES (9);
 INSERT INTO schedule_blocks (block_id) VALUES (10);
 INSERT INTO schedule_blocks (block_id) VALUES (11);
 INSERT INTO schedule_blocks (block_id) VALUES (12);
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (1, 1, '2:30-3:45 Friday', 'Taft');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (2, 2, '3:00-4:15 Wednesday', 'Taft');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (3, 3, '10:30-11:45 Wednesday', 'McKeeman');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (4, 4, '10:30-11:45 Friday', 'McKeeman');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (5, 5, '4:30-5:45 Monday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (6, 5, '4:30-5:45 Wednesday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (7, 6, '4:30-5:45 Tuesday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (8, 6, '4:30-5:45 Thursday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (9, 7, '4:30-5:45 Friday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (10, 8, '3:00-4:15 Monday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (11, 8, '3:00-4:15 Wednesday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (12, 9, '3:00-4:15 Tuesday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (13, 9, '3:00-4:15 Thursday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (14, 10, '3:00-4:15 Friday', 'Rieker');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (15, 11, '7:30-8:45 Monday', 'Rutman');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (16, 11, '7:30-8:45 Wednesday', 'Rutman');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (17, 12, '7:30-8:45 Tuesday', 'Rutman');
-INSERT INTO schedule_times (time_id, block_id, time_descr, instructor) VALUES (18, 12, '7:30-8:45 Thursday', 'Rutman');
+INSERT INTO schedule_blocks (block_id) VALUES (13);
+INSERT INTO schedule_blocks (block_id) VALUES (14);
+INSERT INTO schedule_blocks (block_id) VALUES (15);
+INSERT INTO schedule_blocks (block_id) VALUES (16);
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (1, 1, '10:30-11:45 Monday', 'McKeeman', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (2, 1, '10:30-11:45 Wednesday', 'Brodzik', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (3, 2, '10:30-11:45 Tuesday', 'Brodzik', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (4, 2, '10:30-11:45 Thursday', 'Brodzik', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (5, 3, '10:30-11:45 Friday', 'Brodzik or McKeeman', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (6, 4, '12:00-1:15 Tuesday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (7, 4, '12:00-1:15 Thursday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (8, 5, '1:30-2:45 Tuesday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (9, 5, '1:30-2:45 Thursday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (10, 6, '2:30-3:45 Friday', 'Taft', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (11, 7, '3:00-4:15 Monday', 'Ramsey or Rieker', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (12, 7, '3:00-4:15 Wednesday', 'Ramsey or Rieker', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (13, 8, '3:00-4:15 Tuesday', 'Rieker', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (14, 8, '3:00-4:15 Thursday', 'Ramsey or Rieker', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (15, 9, '3:00-4:15 Friday', 'Ramsey or Rieker or Taft', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (16, 10, '4:30-5:45 Monday', 'Rieker or Stoy', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (17, 10, '4:30-5:45 Wednesday', 'Ramsey or Rieker', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (18, 11, '4:30-5:45 Tuesday', 'Rieker or Stoy', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (19, 11, '4:30-5:45 Thursday', 'Rieker or Stoy', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (20, 12, '4:30-5:45 Friday', 'Ramsey or Rieker', 1, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (21, 13, '6:00-7:15 Wednesday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (22, 14, '6:00-7:15 Thursday', 'Ramsey', 1, 0);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (23, 15, '7:30-8:45 Wednesday', 'Brodzik', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (24, 16, '7:30-8:45 Tuesday', 'Brodzik', 0, 1);
+
+INSERT INTO schedule_times
+              (time_id, block_id, time_descr, instructor, bynr, byfellow)
+  VALUES (25, 16, '7:30-8:45 Thursday', 'Brodzik', 0, 1);
+

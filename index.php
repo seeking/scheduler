@@ -22,7 +22,7 @@
 
 <form id="login" method="post" action="login.php">
 <p>Login<br/><input type="text" id="login" name="login" /></p>
-<p>Password<br/><input type="password" id="password" name="password"/></p>
+<p>Password<br/><input type="text" id="password" name="password"/></p>
 <p><input type="submit" value="Submit" id="submit"> <input type="reset" id="reset"></p>
 </form>
 

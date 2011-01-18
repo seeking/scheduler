@@ -1,7 +1,7 @@
 <?php
 	// The People's Glorious Scheduler
 	// Hacked by Ming Chow
-	// Last updated on January 10, 2011
+	// Last updated on January 17, 2011
 	
 	session_start();
 	if (!isset($_SESSION['login'])) {
@@ -50,32 +50,34 @@
 		currency = document.getElementById("currency");
 		for (i = 1; i <= numTimes; i++) {
 			elemName = 'time' + i;
-			elem = document.getElementById(elemName).value;
-			value = parseInt(elem);
-			if (!isNaN(value)) {
-				numShillings -= value;
+			try {
+				elem = document.getElementById(elemName).value;
+				value = parseInt(elem);
+				if (!isNaN(value)) {
+					numShillings -= value;
+				}
 			}
-			/*elemName = 'veto' + i;
-			if (document.getElementById(elemName).checked) {
-				numVetos -= 1;
-			}*/
+			catch (e) {}
 		}
 		for (i = 1; i <= numBlocks; i++) {
 			okay = false;
 			elemName = 'block' + i;
-			elems = document.getElementById(elemName).getElementsByClassName("veto");
-			j = 0;
-			while (!okay && j < elems.length) {
-				if (elems[j].checked) {
-					okay = true;
+			try {
+				elems = document.getElementById(elemName).getElementsByClassName("veto");
+				j = 0;
+				while (!okay && j < elems.length) {
+					if (elems[j].checked) {
+						okay = true;
+					}
+					else {
+						j++;
+					}
 				}
-				else {
-					j++;
+				if (okay) {
+					numVetos -= 1;
 				}
 			}
-			if (okay) {
-				numVetos -= 1;
-			}
+			catch (e) {}
 		}
 		currency.innerHTML = "<p>You have " + numShillings + " shillings.</p></p>You have " + numVetos + " vetos.</p>"
 		if (numShillings <= 0) {
@@ -154,7 +156,7 @@
 <?php
 	foreach ($blocks as $b) {
 		echo "<div id=\"block" . $b['block_id'] . "\">\n";
-		$timesByBlock = getTimesByBlock($b['block_id']);
+		$timesByBlock = getTimesByBlock($b['block_id'], $_SESSION['needsnr']);
 		echo "<table class=\"blocktbl\">\n";
 		foreach ($timesByBlock as $t) {
 			echo '<tr><td class="timeslot">Time '. $t['time_id'] . ': ' . $t['time_descr'] . ' (Block ' . $b['block_id'] . ')</td><td class="timebox"><input type="text" name="time' . $t['time_id'] . '" id="time' . $t['time_id'] . '" size="5" value="0" onchange="updateCurrency()" /></td><td class="vetobox">Veto <input type="checkbox" name="veto' . $t['time_id'] . '" class="veto" id="veto' . $t['time_id'] . '" onchange="updateCurrency()" /></td></tr>';
