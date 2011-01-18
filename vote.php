@@ -54,7 +54,12 @@
 				elem = document.getElementById(elemName).value;
 				value = parseInt(elem);
 				if (!isNaN(value)) {
-					numShillings -= value;
+					if (value >= 0) {
+						numShillings -= value;
+					}
+					else {
+						document.getElementById(elemName).value = 0;
+					}
 				}
 			}
 			catch (e) {}
@@ -126,7 +131,10 @@
 		//$vetoCount = 0;
 		for ($count = 1; $count <= $numTimes; $count++) {
 			$label = "time$count";
-			$shillingsCheck += intval($_POST[$label]);
+			$val = intval($_POST[$label]);
+			if ($val >= 0) {
+				$shillingsCheck += $val;
+			}
 			/*$label = "veto$count";
 			if (isset($_POST[$label])) {
 				$vetosCheck++;
