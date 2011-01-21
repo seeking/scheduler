@@ -1,7 +1,7 @@
 <?php
 	// The People's Glorious Scheduler
 	// Hacked by Ming Chow
-	// Last updated on January 10, 2011
+	// Last updated on January 20, 2011
 	
 	session_start();
 	if (!isset($_SESSION['login']) && !isset($_SESSION['admin'])) {
@@ -96,6 +96,8 @@
 	}
 ?>
 </div>
+<p><a href="downloadBids.php">Download Bids to CSV</a></p>
+<p><a href="downloadVetos.php">Download Vetos to CSV</a></p>
 </div>
 
 <?php
